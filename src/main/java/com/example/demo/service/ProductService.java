@@ -5,7 +5,13 @@ import java.util.List;
 
 public interface ProductService {
 
-    Product save(Product product);
-    List<Product> findAll();
-    Product findById(Long id);
+    Product createProduct(Product product);
+
+    Product updateProduct(Long id, Product product);
+
+    Product getProductById(Long id);
+
+    List<Product> getAllProducts();
+
+    void deactivateProduct(Long id);
 }

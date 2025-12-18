@@ -1,34 +1,53 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.model.Product;
-import com.example.demo.service.ProductService;
+import com.example.demo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final Map<Long, Product> db = new HashMap<>();
+    private final ProductRepository productRepository;
 
-    @Override
-    public Product create(Product product) {
-        db.put(product.getId(), product);
-        return product;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @Override
-    public Product getById(Long id) {
-        return db.get(id);
+    public Product createProduct(Product product) {
+        if (productRepository.findBySku(product.getSku()).isPresent()) {
+            throw new IllegalArgumentException("SKU already exists");
+        }
+        return productRepository.save(product);
     }
 
     @Override
-    public List<Product> getAll() {
-        return new ArrayList<>(db.values());
+    public Product updateProduct(Long id, Product product) {
+        Product existing = getProductById(id);
+        existing.setName(product.getName());
+        existing.setCategory(product.getCategory());
+        existing.setPrice(product.getPrice());
+        return productRepository.save(existing);
     }
 
     @Override
-    public void delete(Long id) {
-        db.remove(id);
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public void deactivateProduct(Long id) {
+        Product product = getProductById(id);
+        product.setActive(false);
+        productRepository.save(product);
     }
 }
+

@@ -1,9 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
+@Table(name = "carts")
 public class Cart {
 
     @Id
@@ -11,16 +12,28 @@ public class Cart {
     private Long id;
 
     private Long userId;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+
+    private Instant createdAt;
+    private Instant updatedAt;
 
     @PrePersist
-    void create() {
-        createdAt = updatedAt = new Timestamp(System.currentTimeMillis());
+    public void onCreate() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @PreUpdate
-    void update() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
+    public void onUpdate() {
+        this.updatedAt = Instant.now();
     }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public Instant getCreatedAt() { return createdAt; }
+    public Instant getUpdatedAt() { return updatedAt; }
 }
