@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class DiscountApplicationService {
+public interface DiscountApplicationService {
 
     private final BundleRuleRepository bundleRuleRepository;
     private final CartRepository cartRepository;

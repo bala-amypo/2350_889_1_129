@@ -5,7 +5,7 @@ import com.example.demo.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CartService {
+public interface CartService {
 
     private final CartRepository cartRepository;
 
