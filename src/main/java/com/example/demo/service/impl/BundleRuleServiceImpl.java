@@ -17,17 +17,40 @@ public class BundleRuleServiceImpl implements BundleRuleService {
     }
 
     @Override
-    public List<BundleRule> getAllActiveRules() {
-        return bundleRuleRepository.findByActiveTrue();
-    }
-
-    @Override
     public BundleRule createRule(BundleRule rule) {
         return bundleRuleRepository.save(rule);
     }
 
     @Override
-    public List<BundleRule> getAllRules() {
-        return bundleRuleRepository.findAll();
+    public BundleRule updateRule(Long id, BundleRule rule) {
+        BundleRule existing = bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
+
+        existing.setName(rule.getName());
+        existing.setActive(rule.isActive());
+        existing.setDiscount(rule.getDiscount());
+        // add other fields if present
+
+        return bundleRuleRepository.save(existing);
+    }
+
+    @Override
+    public BundleRule getRuleById(Long id) {
+        return bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
+    }
+
+    @Override
+    public List<BundleRule> getActiveRules() {
+        return bundleRuleRepository.findByActiveTrue();
+    }
+
+    @Override
+    public void deactivateRule(Long id) {
+        BundleRule rule = bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
+
+        rule.setActive(false);
+        bundleRuleRepository.save(rule);
     }
 }
