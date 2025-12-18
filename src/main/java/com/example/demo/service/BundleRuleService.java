@@ -1,28 +1,38 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.BundleRule;
-import com.example.demo.repository.BundleRuleRepository;
+import com.example.demo.model.Product;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public interface BundleRuleService {
+public class ProductServiceImpl implements ProductService {
 
-    private final BundleRuleRepository bundleRuleRepository;
+    private final ProductRepository productRepository;
 
-    public BundleRuleService(BundleRuleRepository bundleRuleRepository) {
-        this.bundleRuleRepository = bundleRuleRepository;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public BundleRule createBundleRule(BundleRule rule) {
-        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
-            throw new IllegalArgumentException("Invalid discount");
-        }
-        return bundleRuleRepository.save(rule);
+    @Override
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
     }
 
-    public List<BundleRule> getActiveRules() {
-        return bundleRuleRepository.findByActiveTrue();
+    @Override
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }
