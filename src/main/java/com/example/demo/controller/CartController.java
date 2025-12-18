@@ -1,3 +1,12 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Cart;
+import com.example.demo.service.CartService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/carts")
 public class CartController {
@@ -8,8 +17,8 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/user/{userId}")
-    public Cart getByUser(@PathVariable Long userId) {
+    @GetMapping("/{userId}")
+    public Cart getCart(@PathVariable Long userId) {
         return cartService.getCartByUserId(userId);
     }
 }

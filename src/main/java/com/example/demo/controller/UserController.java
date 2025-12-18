@@ -1,3 +1,12 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -8,8 +17,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/email/{email}")
-    public User getByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 }
