@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.BundleRule;
 import com.example.demo.repository.BundleRuleRepository;
+import com.example.demo.service.BundleRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,21 +17,17 @@ public class BundleRuleServiceImpl implements BundleRuleService {
     }
 
     @Override
+    public List<BundleRule> getAllActiveRules() {
+        return bundleRuleRepository.findByActiveTrue();
+    }
+
+    @Override
     public BundleRule createRule(BundleRule rule) {
-        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
-            throw new IllegalArgumentException("Invalid discount");
-        }
         return bundleRuleRepository.save(rule);
     }
 
     @Override
-    public BundleRule updateRule(Long id, BundleRule rule) {
-        BundleRule existing = getRuleById(id);
-        existing.setRuleName(rule.getRuleName());
-        existing.setRequiredProductIds(rule.getRequiredProductIds());
-        existing.setDiscountPercentage(rule.getDiscountPercentage());
-        return bundleRuleRepository.save(existing);
+    public List<BundleRule> getAllRules() {
+        return bundleRuleRepository.findAll();
     }
-
-    @Override
-    public BundleRule getRuleById(Long id) {
+}
