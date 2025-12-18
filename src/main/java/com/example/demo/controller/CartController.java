@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
 import com.example.demo.service.CartService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/carts")
@@ -17,8 +14,23 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/{userId}")
-    public Cart getCart(@PathVariable Long userId) {
+    @PostMapping("/{userId}")
+    public Cart create(@PathVariable Long userId) {
+        return cartService.createCart(userId);
+    }
+
+    @GetMapping("/{id}")
+    public Cart getById(@PathVariable Long id) {
+        return cartService.getCartById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public Cart getByUser(@PathVariable Long userId) {
         return cartService.getCartByUserId(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deactivate(@PathVariable Long id) {
+        cartService.deactivateCart(id);
     }
 }

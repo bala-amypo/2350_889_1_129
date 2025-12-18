@@ -18,16 +18,27 @@ public class ProductController {
 
     @PostMapping
     public Product create(@RequestBody Product product) {
-        return productService.save(product);
+        return productService.createProduct(product);
     }
 
-    @GetMapping
-    public List<Product> getAll() {
-        return productService.findAll();
+    @PutMapping("/{id}")
+    public Product update(@PathVariable Long id,
+                          @RequestBody Product product) {
+        return productService.updateProduct(id, product);
     }
 
     @GetMapping("/{id}")
     public Product getById(@PathVariable Long id) {
-        return productService.findById(id);
+        return productService.getProductById(id);
+    }
+
+    @GetMapping
+    public List<Product> getAll() {
+        return productService.getAllProducts();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deactivate(@PathVariable Long id) {
+        productService.deactivateProduct(id);
     }
 }
