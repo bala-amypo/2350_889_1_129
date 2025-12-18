@@ -1,43 +1,42 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final Map<Long, User> db = new HashMap<>();
 
     @Override
     public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
-        }
-        return userRepository.save(user);
+        db.put(user.getId(), user);
+        return user;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public User getUser(Long id) {
+        return db.get(id);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return db.values().stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return new ArrayList<>(db.values());
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        db.remove(id);
     }
 }

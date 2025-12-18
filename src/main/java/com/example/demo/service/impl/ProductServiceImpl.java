@@ -1,37 +1,34 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Product;
-import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
+    private final Map<Long, Product> db = new HashMap<>();
 
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    @Override
+    public Product create(Product product) {
+        db.put(product.getId(), product);
+        return product;
     }
 
     @Override
-    public Product createProduct(Product product) {
-        if (productRepository.findBySku(product.getSku()).isPresent()) {
-            throw new IllegalArgumentException("SKU already exists");
-        }
-        return productRepository.save(product);
+    public Product getById(Long id) {
+        return db.get(id);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getAll() {
+        return new ArrayList<>(db.values());
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    public void delete(Long id) {
+        db.remove(id);
     }
 }

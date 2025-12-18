@@ -4,14 +4,7 @@ import com.example.demo.model.CartItem;
 import java.util.List;
 
 public interface CartItemService {
-
-    CartItem addCartItem(CartItem cartItem);
-
-    CartItem updateCartItem(Long id, CartItem cartItem);
-
-    CartItem getCartItemById(Long id);
-
-    List<CartItem> getAllCartItems();
-
-    void removeCartItem(Long id);
+    CartItem addItem(Long cartId, Long productId, Integer quantity);
+    List<CartItem> getItemsByCart(Long cartId);
+    void removeCartItem(Long cartItemId);
 }

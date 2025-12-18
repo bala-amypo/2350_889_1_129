@@ -1,43 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public interface UserService {
-
-    private final UserRepository userRepository;
-
-  
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    
-    public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
-        }
-        return userRepository.save(user);
-    }
-
-    
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-  
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-    }
-
-   
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-    }
+    User createUser(User user);
+    User getUser(Long id);
+    User getUserByEmail(String email);
+    List<User> getAllUsers();
+    void deleteUser(Long id);
 }

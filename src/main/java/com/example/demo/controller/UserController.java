@@ -1,13 +1,5 @@
-package com.example.demo.controller;
-
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -16,23 +8,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public User getByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 }
