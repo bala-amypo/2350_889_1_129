@@ -7,24 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/discounts")
+@RequestMapping("/discounts")
 public class DiscountApplicationController {
 
-    private final DiscountApplicationService discountApplicationService;
+    private final DiscountApplicationService service;
 
-    public DiscountApplicationController(
-            DiscountApplicationService discountApplicationService) {
-
-        this.discountApplicationService = discountApplicationService;
-    }
-
-    @PostMapping("/apply/{cartId}")
-    public void applyDiscounts(@PathVariable Long cartId) {
-        discountApplicationService.applyDiscounts(cartId);
+    public DiscountApplicationController(DiscountApplicationService service) {
+        this.service = service;
     }
 
     @GetMapping("/{cartId}")
-    public List<DiscountApplication> getDiscounts(@PathVariable Long cartId) {
-        return discountApplicationService.getDiscounts(cartId);
+    public List<DiscountApplication> getByCart(@PathVariable Long cartId) {
+        return service.getDiscountsByCart(cartId);
     }
 }

@@ -13,7 +13,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem addItem(Long cartId, Long productId, Integer quantity) {
-        CartItem item = new CartItem(cartId, productId, quantity);
+       CartItem item = new CartItem(cart, product, quantity);
         db.computeIfAbsent(cartId, k -> new ArrayList<>()).add(item);
         return item;
     }

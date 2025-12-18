@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Cart;
+import com.example.demo.model.DiscountApplication;
+import java.util.List;
 
 public interface DiscountApplicationService {
-    Cart applyDiscounts(Long cartId);
-    Cart getDiscounts(Long cartId);
+
+    List<DiscountApplication> getDiscountsByCart(Long cartId);
 }
