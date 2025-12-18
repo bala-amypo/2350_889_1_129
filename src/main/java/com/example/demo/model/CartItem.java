@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class CartItem {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -16,14 +16,4 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
-
-    public CartItem() {} // REQUIRED
-
-    public CartItem(Cart cart, Product product, Integer quantity) {
-        this.cart = cart;
-        this.product = product;
-        this.quantity = quantity;
-    }
-
-    // getters & setters
 }
