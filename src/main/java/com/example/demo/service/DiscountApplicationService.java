@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface DiscountApplicationService {
 
-    List<DiscountApplication> getDiscountsByCart(Long cartId);
+    DiscountApplication getApplicationById(Long id);
+
+    List<DiscountApplication> getApplicationsForCart(Long cartId);
 }

@@ -1,42 +1,27 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final Map<Long, User> db = new HashMap<>();
+    private final UserRepository userRepository;
 
-    @Override
-    public User createUser(User user) {
-        db.put(user.getId(), user);
-        return user;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public User getUser(Long id) {
-        return db.get(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return db.values().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return new ArrayList<>(db.values());
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        db.remove(id);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 }
