@@ -1,39 +1,43 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.model.Cart;
 import com.example.demo.repository.CartRepository;
-import com.example.demo.service.CartService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
 
-    private final CartRepository cartRepo;
+    private final CartRepository cartRepository;
 
-    public CartServiceImpl(CartRepository cartRepo) {
-        this.cartRepo = cartRepo;
+    public CartServiceImpl(CartRepository cartRepository) {
+        this.cartRepository = cartRepository;
     }
 
     @Override
-    public Cart addCart(Cart cart) {
-        return cartRepo.save(cart);
-    }
-
-    @Override
-    public List<Cart> getAllCarts() {
-        return cartRepo.findAll();
+    public Cart createCart(Long userId) {
+        if (cartRepository.findByUserId(userId).isPresent()) {
+            throw new IllegalArgumentException("Cart already exists");
+        }
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+        return cartRepository.save(cart);
     }
 
     @Override
     public Cart getCartById(Long id) {
-        return cartRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cart not found with id: " + id));
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Override
-    public void deleteCart(Long id) {
-        cartRepo.deleteById(id);
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("not found"));
+    }
+
+    @Override
+    public void deactivateCart(Long id) {
+        Cart cart = getCartById(id);
+        cartRepository.delete(cart);
     }
 }
