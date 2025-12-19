@@ -1,14 +1,18 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Cart;
+import com.example.demo.model.CartItem;
+import com.example.demo.model.Product;
+import com.example.demo.repository.CartItemRepository;
+import com.example.demo.repository.CartRepository;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // ⭐ VERY IMPORTANT
+@Service
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -19,6 +23,7 @@ public class CartItemServiceImpl implements CartItemService {
             CartItemRepository cartItemRepository,
             CartRepository cartRepository,
             ProductRepository productRepository) {
+
         this.cartItemRepository = cartItemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
@@ -27,29 +32,17 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem addItem(Long cartId, Long productId, Integer quantity) {
 
-        if (quantity == null || quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
-
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
-
-        if (!cart.getActive()) {
-            throw new IllegalArgumentException("Only active carts allowed");
-        }
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        if (!product.getActive()) {
-            throw new IllegalArgumentException("Product inactive");
-        }
-
         return cartItemRepository
                 .findByCartIdAndProductId(cartId, productId)
-                .map(existing -> {
-                    existing.setQuantity(existing.getQuantity() + quantity);
-                    return cartItemRepository.save(existing);
+                .map(item -> {
+                    item.setQuantity(item.getQuantity() + quantity);
+                    return cartItemRepository.save(item);
                 })
                 .orElseGet(() -> {
                     CartItem item = new CartItem();
@@ -68,7 +61,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem updateItem(Long id, Integer quantity) {
         CartItem item = cartItemRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("CartItem not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
         item.setQuantity(quantity);
         return cartItemRepository.save(item);
     }
