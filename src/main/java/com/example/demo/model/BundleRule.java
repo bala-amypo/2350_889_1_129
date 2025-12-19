@@ -9,30 +9,41 @@ public class BundleRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ruleName;
+    private String name;
 
-    private String requiredProductIds;
+    private boolean active;
 
-    private Double discountPercentage;
+    private double discount;
 
-    private Boolean active = true;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-
-    public String getRequiredProductIds() { return requiredProductIds; }
-    public void setRequiredProductIds(String requiredProductIds) {
-        this.requiredProductIds = requiredProductIds;
+    public Long getId() {
+        return id;
     }
 
-    public Double getDiscountPercentage() { return discountPercentage; }
-    public void setDiscountPercentage(Double discountPercentage) {
-        this.discountPercentage = discountPercentage;
+    public String getName() {
+        return name;
     }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public boolean isActive() {
+        return active;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 }
