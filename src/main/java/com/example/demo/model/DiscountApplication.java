@@ -2,10 +2,9 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "discount_applications")
 public class DiscountApplication {
 
     @Id
@@ -20,16 +19,9 @@ public class DiscountApplication {
 
     private BigDecimal discountAmount;
 
-    private Instant appliedAt;
+    private LocalDateTime appliedAt;
 
-    @PrePersist
-    public void onApply() {
-        this.appliedAt = Instant.now();
-    }
-
-    // Getters and Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public Cart getCart() { return cart; }
     public void setCart(Cart cart) { this.cart = cart; }
@@ -42,5 +34,8 @@ public class DiscountApplication {
         this.discountAmount = discountAmount;
     }
 
-    public Instant getAppliedAt() { return appliedAt; }
+    public LocalDateTime getAppliedAt() { return appliedAt; }
+    public void setAppliedAt(LocalDateTime appliedAt) {
+        this.appliedAt = appliedAt;
+    }
 }
