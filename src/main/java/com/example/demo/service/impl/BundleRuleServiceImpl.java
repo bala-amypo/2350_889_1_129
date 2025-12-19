@@ -5,19 +5,19 @@ import com.example.demo.repository.BundleRuleRepository;
 
 public class BundleRuleServiceImpl {
 
-    private final BundleRuleRepository repository;
+    private final BundleRuleRepository repo;
 
-    public BundleRuleServiceImpl(BundleRuleRepository repository) {
-        this.repository = repository;
+    public BundleRuleServiceImpl(BundleRuleRepository repo) {
+        this.repo = repo;
     }
 
     public BundleRule createRule(BundleRule rule) {
-        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
+        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100)
             throw new IllegalArgumentException("between 0 and 100");
-        }
-        if (rule.getRequiredProductIds() == null || rule.getRequiredProductIds().trim().isEmpty()) {
+
+        if (rule.getRequiredProductIds() == null || rule.getRequiredProductIds().trim().isEmpty())
             throw new IllegalArgumentException("cannot be empty");
-        }
-        return repository.save(rule);
+
+        return repo.save(rule);
     }
 }

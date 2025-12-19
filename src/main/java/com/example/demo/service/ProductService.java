@@ -1,45 +1,14 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.model.Product;
-import com.example.demo.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 
-import java.math.BigDecimal;
+public interface ProductService {
 
-public class ProductServiceImpl {
+    Product createProduct(Product product);
 
-    private final ProductRepository productRepository;
+    Product updateProduct(Long id, Product product);
 
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    Product getProductById(Long id);
 
-    public Product createProduct(Product product) {
-        if (productRepository.findBySku(product.getSku()).isPresent()) {
-            throw new IllegalArgumentException("SKU already exists");
-        }
-        if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Price must be positive");
-        }
-        return productRepository.save(product);
-    }
-
-    public Product updateProduct(Long id, Product update) {
-        Product p = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        p.setName(update.getName());
-        p.setPrice(update.getPrice());
-        return productRepository.save(p);
-    }
-
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-    }
-
-    public void deactivateProduct(Long id) {
-        Product p = getProductById(id);
-        p.setActive(false);
-        productRepository.save(p);
-    }
+    void deactivateProduct(Long id);
 }

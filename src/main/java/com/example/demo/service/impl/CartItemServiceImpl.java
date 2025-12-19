@@ -1,53 +1,51 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Cart;
-import com.example.demo.model.CartItem;
-import com.example.demo.model.Product;
-import com.example.demo.repository.CartItemRepository;
-import com.example.demo.repository.CartRepository;
-import com.example.demo.repository.ProductRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
 public class CartItemServiceImpl {
 
-    private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
+    private final CartItemRepository itemRepo;
+    private final CartRepository cartRepo;
+    private final ProductRepository productRepo;
 
-    public CartItemServiceImpl(CartItemRepository cartItemRepository,
-                               CartRepository cartRepository,
-                               ProductRepository productRepository) {
-        this.cartItemRepository = cartItemRepository;
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
+    public CartItemServiceImpl(CartItemRepository itemRepo,
+                               CartRepository cartRepo,
+                               ProductRepository productRepo) {
+        this.itemRepo = itemRepo;
+        this.cartRepo = cartRepo;
+        this.productRepo = productRepo;
     }
 
     public CartItem addItemToCart(CartItem item) {
-        Cart cart = cartRepository.findById(item.getCart().getId())
-                .orElseThrow(EntityNotFoundException::new);
-        if (!cart.getActive()) {
-            throw new IllegalArgumentException("active carts");
-        }
-        Product product = productRepository.findById(item.getProduct().getId())
-                .orElseThrow(EntityNotFoundException::new);
-        if (!product.getActive()) {
-            throw new IllegalArgumentException("Product inactive");
-        }
-        if (item.getQuantity() <= 0) {
+        if (item.getQuantity() <= 0)
             throw new IllegalArgumentException("Quantity must be positive");
-        }
 
-        return cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId())
+        Cart cart = cartRepo.findById(item.getCart().getId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        if (!cart.getActive())
+            throw new IllegalArgumentException("active carts only");
+
+        Product product = productRepo.findById(item.getProduct().getId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        return itemRepo.findByCartIdAndProductId(cart.getId(), product.getId())
                 .map(existing -> {
                     existing.setQuantity(existing.getQuantity() + item.getQuantity());
-                    return cartItemRepository.save(existing);
+                    return itemRepo.save(existing);
                 })
-                .orElseGet(() -> cartItemRepository.save(item));
+                .orElseGet(() -> {
+                    item.setCart(cart);
+                    item.setProduct(product);
+                    return itemRepo.save(item);
+                });
     }
 
     public List<CartItem> getItemsForCart(Long cartId) {
-        return cartItemRepository.findByCartId(cartId);
+        return itemRepo.findByCartId(cartId);
     }
 }

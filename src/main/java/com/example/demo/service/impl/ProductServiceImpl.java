@@ -8,38 +8,38 @@ import java.math.BigDecimal;
 
 public class ProductServiceImpl {
 
-    private final ProductRepository productRepository;
+    private final ProductRepository repo;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductServiceImpl(ProductRepository repo) {
+        this.repo = repo;
     }
 
-    public Product createProduct(Product product) {
-        if (productRepository.findBySku(product.getSku()).isPresent()) {
+    public Product createProduct(Product p) {
+        if (repo.findBySku(p.getSku()).isPresent())
             throw new IllegalArgumentException("SKU already exists");
-        }
-        if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+
+        if (p.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Price must be positive");
-        }
-        return productRepository.save(product);
+
+        p.setActive(true);
+        return repo.save(p);
     }
 
-    public Product updateProduct(Long id, Product update) {
-        Product p = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        p.setName(update.getName());
-        p.setPrice(update.getPrice());
-        return productRepository.save(p);
+    public Product updateProduct(Long id, Product data) {
+        Product p = getProductById(id);
+        p.setName(data.getName());
+        p.setPrice(data.getPrice());
+        return repo.save(p);
     }
 
     public Product getProductById(Long id) {
-        return productRepository.findById(id)
+        return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
     public void deactivateProduct(Long id) {
         Product p = getProductById(id);
         p.setActive(false);
-        productRepository.save(p);
+        repo.save(p);
     }
 }

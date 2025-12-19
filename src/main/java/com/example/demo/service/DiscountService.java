@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface DiscountService {
 
-    DiscountApplication applyDiscount(Long cartId);
-
-    List<DiscountApplication> getDiscountsForCart(Long cartId);
+    List<DiscountApplication> evaluateDiscounts(Long cartId);
 }
