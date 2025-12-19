@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CartItem;
 import com.example.demo.service.CartItemService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,20 +16,26 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<CartItem> addItem(@RequestBody CartItem item) {
-        CartItem savedItem = cartItemService.addItem(item);
-        return ResponseEntity.ok(savedItem);
+    @PostMapping
+    public CartItem add(@RequestParam Long cartId,
+                        @RequestParam Long productId,
+                        @RequestParam Integer quantity) {
+        return cartItemService.addItem(cartId, productId, quantity);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<CartItem>> getAllItems() {
-        return ResponseEntity.ok(cartItemService.getAllItems());
+    @PutMapping("/{id}")
+    public CartItem update(@PathVariable Long id,
+                           @RequestParam Integer quantity) {
+        return cartItemService.updateItem(id, quantity);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
-        cartItemService.deleteItem(id);
-        return ResponseEntity.ok().build();
+    @GetMapping("/cart/{cartId}")
+    public List<CartItem> getByCart(@PathVariable Long cartId) {
+        return cartItemService.getItemsForCart(cartId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        cartItemService.removeItem(id);
     }
 }

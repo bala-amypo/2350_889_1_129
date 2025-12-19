@@ -7,22 +7,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bundles")
+@RequestMapping("/bundle-rules")
 public class BundleRuleController {
 
-    private final BundleRuleService service;
+    private final BundleRuleService bundleRuleService;
 
-    public BundleRuleController(BundleRuleService service) {
-        this.service = service;
+    public BundleRuleController(BundleRuleService bundleRuleService) {
+        this.bundleRuleService = bundleRuleService;
     }
 
     @PostMapping
-    public BundleRule save(@RequestBody BundleRule rule) {
-        return service.save(rule);
+    public BundleRule create(@RequestBody BundleRule rule) {
+        return bundleRuleService.createRule(rule);
     }
 
-    @GetMapping("/active")
-    public List<BundleRule> activeRules() {
-        return service.getActiveRules();
+    @PutMapping("/{id}")
+    public BundleRule update(@PathVariable Long id,
+                             @RequestBody BundleRule rule) {
+        return bundleRuleService.updateRule(id, rule);
+    }
+
+    @GetMapping("/{id}")
+    public BundleRule getById(@PathVariable Long id) {
+        return bundleRuleService.getRuleById(id);
+    }
+
+    @GetMapping
+    public List<BundleRule> getActive() {
+        return bundleRuleService.getActiveRules();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deactivate(@PathVariable Long id) {
+        bundleRuleService.deactivateRule(id);
     }
 }
