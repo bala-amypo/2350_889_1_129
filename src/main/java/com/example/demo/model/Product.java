@@ -1,34 +1,35 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-public class BundleRule {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ruleName;
+    @Column(unique = true)
+    private String sku;
 
-    private String requiredProductIds;
+    private String name;
 
-    private Double discountPercentage;
+    private BigDecimal price;
 
     private Boolean active = true;
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
 
-    public String getRequiredProductIds() { return requiredProductIds; }
-    public void setRequiredProductIds(String requiredProductIds) { this.requiredProductIds = requiredProductIds; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Double getDiscountPercentage() { return discountPercentage; }
-    public void setDiscountPercentage(Double discountPercentage) { this.discountPercentage = discountPercentage; }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
