@@ -1,51 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.demo.model.CartItem;
+import com.example.demo.repository.CartItemRepository;
+import com.example.demo.service.CartItemService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class CartItemServiceImpl {
+@Service
+public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository itemRepo;
-    private final CartRepository cartRepo;
-    private final ProductRepository productRepo;
 
-    public CartItemServiceImpl(CartItemRepository itemRepo,
-                               CartRepository cartRepo,
-                               ProductRepository productRepo) {
+    public CartItemServiceImpl(CartItemRepository itemRepo) {
         this.itemRepo = itemRepo;
-        this.cartRepo = cartRepo;
-        this.productRepo = productRepo;
     }
 
-    public CartItem addItemToCart(CartItem item) {
-        if (item.getQuantity() <= 0)
-            throw new IllegalArgumentException("Quantity must be positive");
-
-        Cart cart = cartRepo.findById(item.getCart().getId())
-                .orElseThrow(EntityNotFoundException::new);
-
-        if (!cart.getActive())
-            throw new IllegalArgumentException("active carts only");
-
-        Product product = productRepo.findById(item.getProduct().getId())
-                .orElseThrow(EntityNotFoundException::new);
-
-        return itemRepo.findByCartIdAndProductId(cart.getId(), product.getId())
-                .map(existing -> {
-                    existing.setQuantity(existing.getQuantity() + item.getQuantity());
-                    return itemRepo.save(existing);
-                })
-                .orElseGet(() -> {
-                    item.setCart(cart);
-                    item.setProduct(product);
-                    return itemRepo.save(item);
-                });
+    @Override
+    public CartItem addItem(CartItem cartItem) {
+        return itemRepo.save(cartItem);
     }
 
-    public List<CartItem> getItemsForCart(Long cartId) {
+    @Override
+    public List<CartItem> getItemsByCartId(Long cartId) {
         return itemRepo.findByCartId(cartId);
+    }
+
+    @Override
+    public void removeItem(Long id) {
+        itemRepo.deleteById(id);
     }
 }

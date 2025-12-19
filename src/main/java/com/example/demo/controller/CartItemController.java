@@ -7,22 +7,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart-items")
+@RequestMapping("/cart-items")
 public class CartItemController {
 
-    private final CartItemService service;
+    private final CartItemService cartItemService;
 
-    public CartItemController(CartItemService service) {
-        this.service = service;
+    public CartItemController(CartItemService cartItemService) {
+        this.cartItemService = cartItemService;
     }
 
     @PostMapping
-    public CartItem addItem(@RequestBody CartItem item) {
-        return service.addItemToCart(item);
+    public CartItem addItem(@RequestBody CartItem cartItem) {
+        return cartItemService.addItem(cartItem);
     }
 
-    @GetMapping("/cart/{cartId}")
+    @GetMapping("/{cartId}")
     public List<CartItem> getItems(@PathVariable Long cartId) {
-        return service.getItemsForCart(cartId);
+        return cartItemService.getItemsByCartId(cartId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        cartItemService.removeItem(id);
     }
 }
