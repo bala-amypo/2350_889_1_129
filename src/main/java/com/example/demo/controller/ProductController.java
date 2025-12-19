@@ -1,18 +1,16 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Product;
-import com.example.demo.service.ProductService;
+import com.example.demo.service.impl.ProductServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductServiceImpl productService) {
         this.productService = productService;
     }
 
@@ -28,16 +26,11 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
+    public Product get(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
-    @GetMapping
-    public List<Product> getAll() {
-        return productService.getAllProducts();
-    }
-
-    @DeleteMapping("/{id}")
+    @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
         productService.deactivateProduct(id);
     }
