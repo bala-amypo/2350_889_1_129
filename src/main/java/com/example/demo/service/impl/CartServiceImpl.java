@@ -3,7 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Cart;
 import com.example.demo.repository.CartRepository;
 import jakarta.persistence.EntityNotFoundException;
-
+@Service
 public class CartServiceImpl {
 
     private final CartRepository cartRepository;
