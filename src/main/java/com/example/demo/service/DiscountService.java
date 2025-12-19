@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.model.DiscountApplication;
-
+import com.example.demo.model.BundleRule;
 import java.util.List;
 
 public interface DiscountService {
-
-    List<DiscountApplication> evaluateDiscounts(Long cartId);
+    List<BundleRule> getActiveDiscounts();
 }
