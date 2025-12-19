@@ -4,7 +4,6 @@ import com.example.demo.model.CartItem;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.service.CartItemService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,17 +16,17 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem addItem(CartItem cartItem) {
-        return itemRepo.save(cartItem);
+    public CartItem addItem(CartItem item) {
+        return itemRepo.save(item);
     }
 
     @Override
-    public List<CartItem> getItemsByCartId(Long cartId) {
-        return itemRepo.findByCartId(cartId);
+    public List<CartItem> getAllItems() {
+        return itemRepo.findAll();
     }
 
     @Override
-    public void removeItem(Long id) {
+    public void deleteItem(Long id) {
         itemRepo.deleteById(id);
     }
 }

@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
 
-@Service   // 👈 IF THIS IS MISSING → BOOM error
+@Service   
 public class CartItemServiceImpl implements CartItemService {
 
     @Override
