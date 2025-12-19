@@ -1,12 +1,13 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.DiscountApplication;
+import com.example.demo.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.*;
 
-import java.util.List;
-
-public interface DiscountApplicationRepository
-        extends JpaRepository<DiscountApplication, Long> {
-
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findBySku(String sku);
+}
+public interface DiscountApplicationRepository extends JpaRepository<DiscountApplication, Long> {
+    void deleteByCartId(Long cartId);
     List<DiscountApplication> findByCartId(Long cartId);
 }
