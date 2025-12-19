@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.BundleRule;
 import com.example.demo.repository.BundleRuleRepository;
+import com.example.demo.service.BundleRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,25 +18,26 @@ public class BundleRuleServiceImpl implements BundleRuleService {
 
     @Override
     public BundleRule createRule(BundleRule rule) {
-        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
-            throw new IllegalArgumentException("Invalid discount");
-        }
         return bundleRuleRepository.save(rule);
     }
 
     @Override
     public BundleRule updateRule(Long id, BundleRule rule) {
-        BundleRule existing = getRuleById(id);
-        existing.setRuleName(rule.getRuleName());
-        existing.setRequiredProductIds(rule.getRequiredProductIds());
-        existing.setDiscountPercentage(rule.getDiscountPercentage());
+        BundleRule existing = bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
+
+        existing.setName(rule.getName());
+        existing.setActive(rule.isActive());
+        existing.setDiscount(rule.getDiscount());
+        // add other fields if present
+
         return bundleRuleRepository.save(existing);
     }
 
     @Override
     public BundleRule getRuleById(Long id) {
         return bundleRuleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
     }
 
     @Override
@@ -45,7 +47,9 @@ public class BundleRuleServiceImpl implements BundleRuleService {
 
     @Override
     public void deactivateRule(Long id) {
-        BundleRule rule = getRuleById(id);
+        BundleRule rule = bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BundleRule not found"));
+
         rule.setActive(false);
         bundleRuleRepository.save(rule);
     }
