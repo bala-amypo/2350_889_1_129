@@ -24,11 +24,12 @@ public class ProductServiceImpl {
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Long id, Product p) {
-        Product existing = getProductById(id);
-        existing.setName(p.getName());
-        existing.setPrice(p.getPrice());
-        return productRepository.save(existing);
+    public Product updateProduct(Long id, Product update) {
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        p.setName(update.getName());
+        p.setPrice(update.getPrice());
+        return productRepository.save(p);
     }
 
     public Product getProductById(Long id) {

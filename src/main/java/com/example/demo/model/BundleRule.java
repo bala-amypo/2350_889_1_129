@@ -11,8 +11,7 @@ public class BundleRule {
 
     private String ruleName;
 
-    @Column(nullable = false)
-    private String requiredProductIds; // CSV
+    private String requiredProductIds;
 
     private Double discountPercentage;
 
@@ -25,14 +24,10 @@ public class BundleRule {
     public void setRuleName(String ruleName) { this.ruleName = ruleName; }
 
     public String getRequiredProductIds() { return requiredProductIds; }
-    public void setRequiredProductIds(String requiredProductIds) {
-        this.requiredProductIds = requiredProductIds;
-    }
+    public void setRequiredProductIds(String requiredProductIds) { this.requiredProductIds = requiredProductIds; }
 
     public Double getDiscountPercentage() { return discountPercentage; }
-    public void setDiscountPercentage(Double discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
+    public void setDiscountPercentage(Double discountPercentage) { this.discountPercentage = discountPercentage; }
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }

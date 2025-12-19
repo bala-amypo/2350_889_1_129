@@ -15,8 +15,7 @@ public class BundleRuleServiceImpl {
         if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
             throw new IllegalArgumentException("between 0 and 100");
         }
-        if (rule.getRequiredProductIds() == null ||
-            rule.getRequiredProductIds().trim().isEmpty()) {
+        if (rule.getRequiredProductIds() == null || rule.getRequiredProductIds().trim().isEmpty()) {
             throw new IllegalArgumentException("cannot be empty");
         }
         return repository.save(rule);

@@ -1,17 +1,23 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.BundleRule;
-import java.util.List;
+import com.example.demo.repository.BundleRuleRepository;
 
-public interface BundleRuleService {
+public class BundleRuleServiceImpl {
 
-    BundleRule createRule(BundleRule rule);
+    private final BundleRuleRepository repository;
 
-    BundleRule updateRule(Long id, BundleRule rule);
+    public BundleRuleServiceImpl(BundleRuleRepository repository) {
+        this.repository = repository;
+    }
 
-    BundleRule getRuleById(Long id);
-
-    List<BundleRule> getActiveRules();
-
-    void deactivateRule(Long id);
+    public BundleRule createRule(BundleRule rule) {
+        if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
+            throw new IllegalArgumentException("between 0 and 100");
+        }
+        if (rule.getRequiredProductIds() == null || rule.getRequiredProductIds().trim().isEmpty()) {
+            throw new IllegalArgumentException("cannot be empty");
+        }
+        return repository.save(rule);
+    }
 }
