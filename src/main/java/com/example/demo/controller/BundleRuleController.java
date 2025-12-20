@@ -1,44 +1,58 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.BundleRule;
-import com.example.demo.service.BundleRuleService;
+import com.example.demo.service.impl.BundleRuleServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/bundle-rules")
+@RequestMapping("/api/bundle-rules")
+@Tag(name = "Bundle Rule Management", description = "APIs for managing bundle discount rules")
 public class BundleRuleController {
-
-    private final BundleRuleService bundleRuleService;
-
-    public BundleRuleController(BundleRuleService bundleRuleService) {
+    
+    private final BundleRuleServiceImpl bundleRuleService;
+    
+    public BundleRuleController(BundleRuleServiceImpl bundleRuleService) {
         this.bundleRuleService = bundleRuleService;
     }
-
+    
     @PostMapping
-    public BundleRule create(@RequestBody BundleRule rule) {
-        return bundleRuleService.createRule(rule);
+    @Operation(summary = "Create a new bundle rule")
+    public ResponseEntity<BundleRule> createRule(@RequestBody BundleRule rule) {
+        BundleRule created = bundleRuleService.createRule(rule);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
-
+    
     @PutMapping("/{id}")
-    public BundleRule update(@PathVariable Long id,
-                             @RequestBody BundleRule rule) {
-        return bundleRuleService.updateRule(id, rule);
+    @Operation(summary = "Update an existing bundle rule")
+    public ResponseEntity<BundleRule> updateRule(@PathVariable Long id, @RequestBody BundleRule rule) {
+        BundleRule updated = bundleRuleService.updateRule(id, rule);
+        return ResponseEntity.ok(updated);
     }
-
+    
     @GetMapping("/{id}")
-    public BundleRule getById(@PathVariable Long id) {
-        return bundleRuleService.getRuleById(id);
+    @Operation(summary = "Get bundle rule by ID")
+    public ResponseEntity<BundleRule> getRule(@PathVariable Long id) {
+        BundleRule rule = bundleRuleService.getRuleById(id);
+        return ResponseEntity.ok(rule);
     }
-
-    @GetMapping
-    public List<BundleRule> getActive() {
-        return bundleRuleService.getActiveRules();
+    
+    @GetMapping("/active")
+    @Operation(summary = "Get all active bundle rules")
+    public ResponseEntity<List<BundleRule>> getActiveRules() {
+        List<BundleRule> rules = bundleRuleService.getActiveRules();
+        return ResponseEntity.ok(rules);
     }
-
-    @DeleteMapping("/{id}")
-    public void deactivate(@PathVariable Long id) {
+    
+    @PutMapping("/{id}/deactivate")
+    @Operation(summary = "Deactivate a bundle rule")
+    public ResponseEntity<Void> deactivateRule(@PathVariable Long id) {
         bundleRuleService.deactivateRule(id);
+        return ResponseEntity.noContent().build();
     }
 }

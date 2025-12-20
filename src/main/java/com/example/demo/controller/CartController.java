@@ -1,36 +1,49 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
-import com.example.demo.service.CartService;
+import com.example.demo.service.impl.CartServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/carts")
+@RequestMapping("/api/carts")
+@Tag(name = "Cart Management", description = "APIs for managing shopping carts")
 public class CartController {
-
-    private final CartService cartService;
-
-    public CartController(CartService cartService) {
+    
+    private final CartServiceImpl cartService;
+    
+    public CartController(CartServiceImpl cartService) {
         this.cartService = cartService;
     }
-
+    
     @PostMapping("/{userId}")
-    public Cart create(@PathVariable Long userId) {
-        return cartService.createCart(userId);
+    @Operation(summary = "Create a cart for a user")
+    public ResponseEntity<Cart> createCart(@PathVariable Long userId) {
+        Cart cart = cartService.createCart(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cart);
     }
-
+    
     @GetMapping("/{id}")
-    public Cart getById(@PathVariable Long id) {
-        return cartService.getCartById(id);
+    @Operation(summary = "Get cart by ID")
+    public ResponseEntity<Cart> getCart(@PathVariable Long id) {
+        Cart cart = cartService.getCartById(id);
+        return ResponseEntity.ok(cart);
     }
-
+    
     @GetMapping("/user/{userId}")
-    public Cart getByUser(@PathVariable Long userId) {
-        return cartService.getCartByUserId(userId);
+    @Operation(summary = "Get active cart for a user")
+    public ResponseEntity<Cart> getCartByUser(@PathVariable Long userId) {
+        Cart cart = cartService.getActiveCartForUser(userId);
+        return ResponseEntity.ok(cart);
     }
-
-    @DeleteMapping("/{id}")
-    public void deactivate(@PathVariable Long id) {
+    
+    @PutMapping("/{id}/deactivate")
+    @Operation(summary = "Deactivate a cart")
+    public ResponseEntity<Void> deactivateCart(@PathVariable Long id) {
         cartService.deactivateCart(id);
+        return ResponseEntity.noContent().build();
     }
 }
