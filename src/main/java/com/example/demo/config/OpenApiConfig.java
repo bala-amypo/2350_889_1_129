@@ -20,7 +20,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 // Server configuration (as per preferred project)
                 .servers(List.of(
-                        new Server().url("https://9058.pro604cr.amypo.ai/")
+                        new Server().url("https://9142.pro604cr.amypo.ai/")
                 ))
 
                 // API info (optional but good)
