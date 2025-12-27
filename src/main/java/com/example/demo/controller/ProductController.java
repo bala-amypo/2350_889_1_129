@@ -36,7 +36,6 @@ public class ProductController {
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize
     @Operation(summary = "Get product by ID")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         Product product = productService.getProductById(id);
